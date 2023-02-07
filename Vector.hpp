@@ -26,33 +26,33 @@ namespace ft
 	//Construcor and Destructor:
 		Vector()
 		{
-			std::cout << "Vector()" << std::endl;
+			// std::cout << "Vector()" << std::endl;
 			_size = 0;
 			_vector = new value_type[_size];
 		}
 
 		Vector(size_type size)
 		{
-			std::cout << "Vector(size_type size)" << std::endl;
+			// std::cout << "Vector(size_type size)" << std::endl;
 			_size = size;
 			_vector = new value_type[_size];
 		}
 
 		Vector(init_list data): _vector(NULL)
 		{
-			std::cout << "Vector(init_list data)" << std::endl;
+			// std::cout << "Vector(init_list data)" << std::endl;
 			*this = data;
 		}
 
 		Vector(const Vector& copy): _vector(NULL)
 		{
-			std::cout << "Vector(const Vector& copy)" << std::endl;
+			// std::cout << "Vector(const Vector& copy)" << std::endl;
 			*this = copy;
 		}
 
 		Vector	&operator=(const Vector &copy)
 		{
-			std::cout << "Vector &operator=(const Vector &copy)" << std::endl;
+			// std::cout << "Vector &operator=(const Vector &copy)" << std::endl;
 			if (this == &copy)
 				return *this;
 			delete [] _vector;
@@ -65,7 +65,7 @@ namespace ft
 
 		Vector	&operator=(const init_list data)
 		{
-			std::cout << "Vector& operator= (const init_list data)" << std::endl;
+			// std::cout << "Vector& operator= (const init_list data)" << std::endl;
 			delete [] _vector;
 			_size = data.size();
 			_vector = new value_type[_size];
@@ -77,7 +77,7 @@ namespace ft
 
 		~Vector() 
 		{
-			std::cout << "~Vector()" << std::endl;
+			// std::cout << "~Vector()" << std::endl;
 			delete [] _vector;
 		}
 
@@ -201,5 +201,36 @@ namespace ft
 		if (i == 0)
 			os << "\t[]";
 		return os;
+	}
+
+//ex01
+	template<class T>
+	Vector<T> linear_combination(const Matrix<T> &mat, const std::initializer_list<T> &vec_list)
+	{
+		Vector<T>	vec(vec_list);
+		return linear_combination(mat, vec);
+	}
+
+	template<class T> 
+	Vector<T> linear_combination(const std::initializer_list<Vector<T>> &mat_list, const std::initializer_list<T> &vec_list)
+	{
+		Matrix<T>	mat(mat_list);
+		Vector<T>	vec(vec_list);
+		return linear_combination(mat, vec);
+	}
+
+	template<class T> 
+	Vector<T> linear_combination(const Matrix<T> &mat, const Vector<T> &vec)
+	{
+		if (mat.getRow() != vec.getSize())
+			throw std::length_error("THROW linear_combination: mat.getRow() != vec.getSize()");
+
+		Vector<T>	tmp(mat.getCol());
+		for (size_t c = 0; c < tmp.getSize(); c++)
+			tmp[c] = 0;
+		for (size_t r = 0; r < mat.getRow(); r++)
+			for (size_t c = 0; c < mat.getCol(); c++)
+				tmp[c] += mat[r * mat.getCol() + c] * vec[r];
+		return tmp;
 	}
 }

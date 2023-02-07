@@ -32,11 +32,18 @@ namespace ft
 					throw std::length_error("THROW MATRIX : wrong matrix size");
 		}
 
+		void	check_init_matrix_col(const std::initializer_list<Vector<T>> &data)
+		{
+			for (auto row : data)
+				if (_col !=  row.getSize())
+					throw std::length_error("THROW MATRIX : wrong matrix size");
+		}
+
 	public:
 	//Construcor and Destructor:
 		Matrix()
 		{
-			std::cout << "Matrix()" << std::endl;
+			// std::cout << "Matrix()" << std::endl;
 			_row = 0;
 			_col = 0;
 			_matrix = new value_type[_row * _col];
@@ -44,7 +51,7 @@ namespace ft
 
 		Matrix(size_type row, size_type col)
 		{
-			std::cout << "Matrix(size_type row, size_type col)" << std::endl;
+			// std::cout << "Matrix(size_type row, size_type col)" << std::endl;
 			_row = row;
 			_col = col;
 			_matrix = new value_type[_row * _col];
@@ -52,19 +59,25 @@ namespace ft
 
 		Matrix(init_list data): _matrix(NULL)
 		{
-			std::cout << "Matrix(init_list data)" << std::endl;
+			// std::cout << "Matrix(init_list data)" << std::endl;
+			*this = data;
+		}
+
+		Matrix(const std::initializer_list<Vector<T>> &data): _matrix(NULL)
+		{
+			// std::cout << "Matrix(const std::initializer_list<Vector<T>> &mat_list)" << std::endl;
 			*this = data;
 		}
 
 		Matrix(const Matrix& copy): _matrix(NULL)
 		{
-			std::cout << "Matrix(const Matrix& copy)" << std::endl;
+			// std::cout << "Matrix(const Matrix& copy)" << std::endl;
 			*this = copy;
 		}
 
 		Matrix	&operator=(const Matrix &copy)
 		{
-			std::cout << "Matrix &operator=(const Matrix& copy)" << std::endl;
+			// std::cout << "Matrix &operator=(const Matrix& copy)" << std::endl;
 			if (this == &copy)
 				return *this;
 			delete [] _matrix;
@@ -78,7 +91,7 @@ namespace ft
 
 		Matrix	&operator=(const init_list data)
 		{		
-			std::cout << "Matrix& operator= (const init_list init)" << std::endl;
+			// std::cout << "Matrix& operator= (const init_list init)" << std::endl;
 			delete [] _matrix;
 			_row = data.size();
 			_col = data.begin()->size();
@@ -95,9 +108,27 @@ namespace ft
 			return *this;
 		}
 
+		Matrix	&operator=(const std::initializer_list<Vector<T>> &data)
+		{
+			// std::cout << "Matrix &operator=(const std::initializer_list<Vector<T>> &data)" << std::endl;
+			delete [] _matrix;
+			_row = data.size();
+			_col = (*data.begin()).getSize();
+			check_init_matrix_col(data);
+			_matrix = new value_type[_row * _col];
+			size_type	r = 0;
+			for (auto row : data)
+			{
+				for (size_type c = 0; c < row.getSize(); c++)
+					_matrix[r * _col + c] = row[c];
+				r++;
+			}
+			return *this;
+		}
+
 		~Matrix() 
 		{	
-			std::cout << "~Matrix()" << std::endl;
+			// std::cout << "~Matrix()" << std::endl;
 			delete [] _matrix; 
 		}
 
