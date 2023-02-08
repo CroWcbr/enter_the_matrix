@@ -256,9 +256,12 @@ namespace ft
 	std::ostream& operator<<(std::ostream& os, const ft::Matrix<T> &mat)
 	{
 		size_t i = 0;
+		os << "\t[";
 		for (; i < mat.getRow(); i++) 
 		{
-			os << "\t[";
+			if (i != 0)
+				os << "\t";
+			os << "[";
 			size_t j = 0;
 			for (; j < mat.getCol(); j++) 
 			{
@@ -270,8 +273,7 @@ namespace ft
 			if (i != mat.getRow() - 1)
 				os << std::endl;
 		}
-		if (i == 0)
-			os << "\t[]";
+		os << "]";
 		return os;
 	}
 }

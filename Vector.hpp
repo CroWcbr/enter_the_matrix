@@ -233,4 +233,11 @@ namespace ft
 				tmp[c] += mat[r * mat.getCol() + c] * vec[r];
 		return tmp;
 	}
+
+//ex02
+	template<class T> 
+	T	lerp(const T &u, const T &v, double t)
+	{
+		return (((1 - t) * u) + (t * v));
+	}
 }
