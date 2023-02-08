@@ -1,10 +1,10 @@
 # enter_the_matrix
 
 - ex00 - Add, Subtract and Scale
-- ex01 -
-- ex02 -
-- ex03 - 
-- ex04 -
+- ex01 - Linear combination
+- ex02 - Linear interpolation
+- ex03 - Dot product
+- ex04 - Norm
 - ex05 -
 - ex06 -
 - ex07 -
