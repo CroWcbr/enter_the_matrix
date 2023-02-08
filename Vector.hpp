@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include "Matrix.hpp"
+#include "math_function.hpp"
 
 namespace ft
 {
@@ -180,14 +181,49 @@ namespace ft
 
 		Vector	&operator*=(const value_type &a) { return scl(a); }
 
+//ex03
+		value_type	dot(const Vector<value_type> &vec) const
+		{
+			if (_size != vec.getSize())
+				throw std::length_error("THROW VECTOR dot: wrong size (_size != vec.getSize())");
+			value_type	tmp = value_type();
+			for (size_type i = 0; i < _size; i++)
+				tmp += _vector[i] * vec[i];
+			return tmp;
+		}
+
+//ex04
+		value_type	norm_1()
+		{
+			value_type	tmp = value_type();
+			for (size_type i = 0; i < _size; i++)
+				tmp += ft_abs(_vector[i]);
+			return tmp;
+		}
+
+		value_type	norm()
+		{
+			value_type	tmp = value_type();
+			for (size_type i = 0; i < _size; i++)
+				tmp += _vector[i] * _vector[i];
+			return ft_sqrt(tmp);
+		}
+
+		value_type	norm_inf()
+		{
+			value_type	tmp = value_type();
+			for (size_type i = 0; i < _size; i++)
+				tmp = ft_max(tmp, ft_abs(_vector[i]));
+			return tmp;
+		}
 	};
 
 	template<class T>
-	Vector<T> operator*(const T &a, const Vector<T> &vec) { return vec * a; }
+	Vector<T>		operator*(const T &a, const Vector<T> &vec) { return vec * a; }
 
 //Print
 	template<class T>
-	std::ostream& operator<<(std::ostream& os, const ft::Vector<T> &vec)
+	std::ostream&	operator<<(std::ostream& os, const ft::Vector<T> &vec)
 	{
 		size_t i = 0;
 		for (; i < vec.getSize(); i++) 
@@ -205,14 +241,14 @@ namespace ft
 
 //ex01
 	template<class T>
-	Vector<T> linear_combination(const Matrix<T> &mat, const std::initializer_list<T> &vec_list)
+	Vector<T>		linear_combination(const Matrix<T> &mat, const std::initializer_list<T> &vec_list)
 	{
 		Vector<T>	vec(vec_list);
 		return linear_combination(mat, vec);
 	}
 
 	template<class T> 
-	Vector<T> linear_combination(const std::initializer_list<Vector<T>> &mat_list, const std::initializer_list<T> &vec_list)
+	Vector<T>		linear_combination(const std::initializer_list<Vector<T>> &mat_list, const std::initializer_list<T> &vec_list)
 	{
 		Matrix<T>	mat(mat_list);
 		Vector<T>	vec(vec_list);
@@ -220,7 +256,7 @@ namespace ft
 	}
 
 	template<class T> 
-	Vector<T> linear_combination(const Matrix<T> &mat, const Vector<T> &vec)
+	Vector<T>		linear_combination(const Matrix<T> &mat, const Vector<T> &vec)
 	{
 		if (mat.getRow() != vec.getSize())
 			throw std::length_error("THROW linear_combination: mat.getRow() != vec.getSize()");
@@ -236,8 +272,9 @@ namespace ft
 
 //ex02
 	template<class T> 
-	T	lerp(const T &u, const T &v, double t)
-	{
-		return (((1 - t) * u) + (t * v));
-	}
+	T				lerp(const T &u, const T &v, double t) { return (((1 - t) * u) + (t * v)); }
+
+//ex03
+	template<class T> 
+	T				dot(const Vector<T> &v1, const Vector<T> &v2) { return v1.dot(v2); }
 }
