@@ -5,10 +5,10 @@
 - ex02 - Linear interpolation
 - ex03 - Dot product
 - ex04 - Norm
-- ex05 -
-- ex06 -
-- ex07 -
-- ex08 - 
+- ex05 - Cosine
+- ex06 - Cross product
+- ex07 - Linear map, Matrix multiplication
+- ex08 - Trace
 - ex09 -
 - ex10 -
 - ex11 -
