@@ -88,7 +88,7 @@ namespace ft
 		size_type			getSize() const { return _size; }
 		pointer				getVec() const { return _vector; }
 		void				setSize(size_type n) { _size = n; }
-		void				setVec(pointer vec) { _vector = vec; }
+		void				setVec(pointer vec) { delete [] _vector; _vector = vec; }
 		size_type			shape() const { return getSize(); }
 		void				print() const { std::cout << *this << std::endl; }
 
@@ -222,7 +222,11 @@ namespace ft
 //ex05
 		value_type	angle_cos(const Vector<value_type> &vec) const
 		{
-			return (dot(vec) / (norm() * vec.norm()));
+			value_type	norm_this = norm();
+			value_type	norm_vec = vec.norm();
+			if (ft_abs(norm_this) < 0.000000001 || ft_abs(norm_vec) < 0.000000001)
+				throw std::length_error("THROW angle_cos : there is a zero point, not vector");
+			return (dot(vec) / (norm_this * norm_vec));
 		}
 
 	};
@@ -256,7 +260,7 @@ namespace ft
 		return linear_combination(mat, vec);
 	}
 
-	template<class T> 
+	template<class T>
 	Vector<T>		linear_combination(const std::initializer_list<Vector<T>> &mat_list, const std::initializer_list<T> &vec_list)
 	{
 		Matrix<T>	mat(mat_list);
@@ -264,7 +268,7 @@ namespace ft
 		return linear_combination(mat, vec);
 	}
 
-	template<class T> 
+	template<class T>
 	Vector<T>		linear_combination(const Matrix<T> &mat, const Vector<T> &vec)
 	{
 		if (mat.getRow() != vec.getSize())
@@ -280,22 +284,34 @@ namespace ft
 	}
 
 //ex02
-	template<class T> 
+	template<class T>
 	T				lerp(const T &u, const T &v, double t) { return (((1 - t) * u) + (t * v)); }
 
 //ex03
-	template<class T> 
+	template<class T>
 	T				dot(const Vector<T> &v1, const Vector<T> &v2) { return v1.dot(v2); }
 
 //ex05
-	template<class T> 
+	template<class T>
 	T				angle_cos(const Vector<T> &v1, const Vector<T> &v2) { return v1.angle_cos(v2); }
 
-	template<class T> 
+	template<class T>
 	T				angle_cos(const std::initializer_list<T> &v1, const std::initializer_list<T> &v2) 
 	{ 
 		Vector<T>	v(v1);
 		return v.angle_cos(v2);
 	}
 
+//ex06
+	template<class T>
+	Vector<T>		cross_product(const Vector<T> &u, const Vector<T> &v)
+	{
+		if (u.getSize() != 3 || v.getSize() != 3)
+			throw std::length_error("THROW VECTOR cross_product: wrong size (u.getSize() != 3 || v.getSize() != 3)");
+		Vector<T>	tmp(3);
+		tmp[0] = u[1] * v[2] - u[2] * v[1];
+		tmp[1] = u[2] * v[0] - u[0] * v[2];
+		tmp[2] = u[0] * v[1] - u[1] * v[0];
+		return tmp;
+	}
 }
