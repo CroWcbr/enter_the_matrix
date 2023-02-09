@@ -46,6 +46,17 @@ void	test_additional()
 	u = {1., 0.};
 	v = {0., 1.};
 	std::cout << "{1., 0.} & {0., 1.}" << "\t" << angle_cos({1., 0.}, {0., 1.}) << std::endl;
+
+	u = {0., 0.};
+	v = {0., 1.};
+	try
+	{
+		std::cout << "{0., 0.} & {0., 1.}" << "\t" << angle_cos(u, v) << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 }
 
 int	main()
