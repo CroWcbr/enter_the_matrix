@@ -5,6 +5,8 @@
 #include "Matrix.hpp"
 #include "math_function.hpp"
 
+#include <cmath>
+
 namespace ft
 {
 	template <class T>
@@ -193,7 +195,7 @@ namespace ft
 		}
 
 //ex04
-		value_type	norm_1()
+		value_type	norm_1() const
 		{
 			value_type	tmp = value_type();
 			for (size_type i = 0; i < _size; i++)
@@ -201,7 +203,7 @@ namespace ft
 			return tmp;
 		}
 
-		value_type	norm()
+		value_type	norm() const
 		{
 			value_type	tmp = value_type();
 			for (size_type i = 0; i < _size; i++)
@@ -209,13 +211,20 @@ namespace ft
 			return ft_sqrt(tmp);
 		}
 
-		value_type	norm_inf()
+		value_type	norm_inf() const
 		{
 			value_type	tmp = value_type();
 			for (size_type i = 0; i < _size; i++)
 				tmp = ft_max(tmp, ft_abs(_vector[i]));
 			return tmp;
 		}
+
+//ex05
+		value_type	angle_cos(const Vector<value_type> &vec) const
+		{
+			return (dot(vec) / (norm() * vec.norm()));
+		}
+
 	};
 
 	template<class T>
@@ -277,4 +286,16 @@ namespace ft
 //ex03
 	template<class T> 
 	T				dot(const Vector<T> &v1, const Vector<T> &v2) { return v1.dot(v2); }
+
+//ex05
+	template<class T> 
+	T				angle_cos(const Vector<T> &v1, const Vector<T> &v2) { return v1.angle_cos(v2); }
+
+	template<class T> 
+	T				angle_cos(const std::initializer_list<T> &v1, const std::initializer_list<T> &v2) 
+	{ 
+		Vector<T>	v(v1);
+		return v.angle_cos(v2);
+	}
+
 }
