@@ -246,8 +246,62 @@ namespace ft
 		}
 
 		Matrix	&operator*=(const value_type &a) { return scl(a); }
+
+//ex07
+		Vector<value_type>	mul_vec(const Vector<value_type> &vec) const
+		{
+			if (_col != vec.getSize())
+				throw std::length_error("THROW MATRIX mul_vec: _col != vec.getSize()");
+			
+			Vector<value_type> tmp(_row);
+			
+			for (size_type r = 0; r < _row; r++)
+			{
+				tmp[r] = 0;
+				for (size_type c = 0; c < _col; c++)
+					tmp[r] += _matrix[r * _col + c] * vec[c];
+			}
+			return tmp;
+		}
+
+		Vector<value_type>	operator*(const Vector<value_type> &vec) const { return mul_vec(vec); }
+
+		Matrix<value_type>	&operator*=(const Vector<value_type> &vec)
+		{
+			Vector<value_type>	tmp = mul_vec(vec);
+			*this = tmp.reshape_vector_to_matrix(tmp.getSize(), 1);
+			return *this;
+		}
+
+		Matrix	&operator*=(const Matrix<value_type> &mat)
+		{
+			if (_col != mat.getRow())
+				throw std::length_error("THROW MATRIX mul_mat: _col != mat.getRow()");
+			
+			Matrix	tmp(_row, mat.getCol());
+			for (size_type r1 = 0; r1 < tmp.getRow(); r1++)
+			{
+				for (size_type c2 = 0; c2 < tmp.getCol(); c2++)
+				{
+					tmp[r1 * tmp.getCol() + c2] = 0;
+					for (size_type cr = 0; cr < _col; cr++)
+						tmp[r1 * tmp.getCol() + c2] += _matrix[r1 * _col + cr] * mat[cr * mat.getCol() + c2];
+				}
+			}
+			*this = tmp;
+			return *this;
+		}
+
+		Matrix	mul_mat(const Matrix<value_type> &mat) const
+		{
+			Matrix	tmp(*this);
+			return tmp *= mat;
+		}
+
+		Matrix	operator*(const Matrix<value_type> &mat) const { return mul_mat(mat); }
 };
 
+//ex00
 	template<class T>
 	Matrix<T> operator*(const T &a, const Matrix<T> &mat) { return mat * a; }
 

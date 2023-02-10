@@ -231,6 +231,7 @@ namespace ft
 
 	};
 
+//ex00
 	template<class T>
 	Vector<T>		operator*(const T &a, const Vector<T> &vec) { return vec * a; }
 
