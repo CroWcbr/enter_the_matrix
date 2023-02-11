@@ -140,7 +140,7 @@ namespace ft
 		pointer				getMat() const { return _matrix; }
 		void				setRow(size_type n) { _row = n; }
 		void				setCol(size_type n) { _col = n; }
-		void				setMat(pointer mat) { _matrix = mat; }
+		void				setMat(pointer mat) { delete [] _matrix; _matrix = mat; }
 		pair_shape			shape() const { return std::make_pair(getRow(), getCol() ); }
 		bool				is_square() const { return (getRow() == getCol()); }
 		void				print() const { std::cout << *this << std::endl; }
@@ -159,40 +159,38 @@ namespace ft
 		}
 
 //delete_elem
-		void				delete_row(int n)
+		void				delete_row(const size_type &n)
 		{
-			if (n < 0 || (size_type)n >= _row)
+			if (n < 0 || n >= _row)
 				throw std::length_error("THROW MATRIX delete_row: wrong element");
 			
-			pointer	tmp = new value_type[_row * _col - _row];
+			pointer	tmp = new value_type[_row * _col - _col];
 			for (size_type i = 0, j = 0; i < _row * _col; )
 			{
-				if (i == (size_type)n * _col)
+				if (i == n * _col)
 					i += _col;
-				tmp[j++] = _matrix[i++];
+				else
+					tmp[j++] = _matrix[i++];
 			}
-			delete [] _matrix;
-			_matrix = tmp;
+			setMat(tmp);
 			_row--;
 		}
 
-		void				delete_col(int n)
+		void				delete_col(const size_type &n)
 		{
-			if (n < 0 || (size_type)n >= _row)
+			if (n < 0 || n >= _row)
 				throw std::length_error("THROW MATRIX delete_col: wrong element");
 			
-			pointer	tmp = new value_type[_row * _col - _col];
+			pointer	tmp = new value_type[_row * _col - _row];
 			for (size_type i = 0, j = 0; i < _row * _col; i++)
 			{
-				if (i % _col == (size_type)n)
+				if (i % _col == n)
 					continue ;
 				tmp[j++] = _matrix[i];
 			}
-			delete [] _matrix;
-			_matrix = tmp;
+			setMat(tmp);
 			_col--;
 		}
-
 //overload
 		value_type			&operator[](size_type n) { return _matrix[n]; }
 		const value_type	&operator[](size_type n) const { return _matrix[n]; }
@@ -359,6 +357,73 @@ namespace ft
 				}
 			}
 			return tmp;
+		}
+
+//ex11 Gaussian elimination for all matrix
+		value_type	determinant() const
+		{
+			if (!is_square())
+				throw std::length_error("THROW MATRIX determinant: !is_square");
+			if (_row == 0 || _col == 0 )
+				throw std::length_error("THROW MATRIX determinant: An empty matrix cannot have a determinant");
+
+			Matrix<value_type>	tmp(*this);
+			value_type			det = 1;
+
+			for (size_type r = 0, c = 0; r < _row && c < _col; c++) //make upper triangular matrix
+			{
+				if (ft_abs(tmp[r * _col + c]) < EPS)
+					for (size_type i = r + 1; i < _row; i++)			//check and change row
+						if (ft_abs(tmp[i * _col + c]) > ft_abs(tmp[r * _col + c]))
+						{
+							for (size_type j = 0; j < _col; j++)
+							{
+								value_type	ttt = tmp[r * _col + j];
+								tmp[r * _col + j] = tmp[i * _col + j];
+								tmp[i * _col + j] = -ttt;
+							}
+							break;
+						}
+				if (ft_abs(tmp[r * _col + c]) > EPS)
+				{
+					
+					for (size_type i = r + 1; i < _row; i++)			//make rows zero
+					{
+						value_type	scale_tmp = tmp[i * _col + c] / tmp[r * _col + c];
+						for (size_type j = 0; j < _col; j++)
+							tmp[i * _col + j] -= scale_tmp * tmp[r * _col + j];
+					}
+					r++;
+				}
+			}
+			for (size_type i = 0; i < _row; i++)
+				det *= tmp[i * _col + i];
+			return det;
+		}
+
+		value_type	determinant_for_4() const
+		{
+			if (!is_square())
+				throw std::length_error("THROW MATRIX determinant_for_4: !is_square");
+			if (_row == 0 || _col == 0 )
+				throw std::length_error("THROW MATRIX determinant: An empty matrix cannot have a determinant");
+
+			if (_row * _col == 1)
+				return _matrix[0];
+			if (_row * _col == 4)
+				return _matrix[0] * _matrix[3] - _matrix[1] * _matrix[2];
+			
+
+			value_type			det = 0;
+
+			for (size_type i = 0; i < _row; i++) 
+			{
+				Matrix<value_type>	tmp(*this);
+				tmp.delete_row(i);
+				tmp.delete_col(0);
+				det += _matrix[i * _col + 0] * std::pow(-1, i) * tmp.determinant_for_4();
+			}
+			return det;
 		}
 };
 
