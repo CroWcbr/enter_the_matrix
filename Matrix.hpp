@@ -6,6 +6,8 @@
 
 namespace ft
 {
+	#define EPS 0.0000000001
+
 	template <class T>
 	class Vector;
 
@@ -266,14 +268,14 @@ namespace ft
 
 		Vector<value_type>	operator*(const Vector<value_type> &vec) const { return mul_vec(vec); }
 
-		Matrix<value_type>	&operator*=(const Vector<value_type> &vec)
+		Matrix				&operator*=(const Vector<value_type> &vec)
 		{
 			Vector<value_type>	tmp = mul_vec(vec);
 			*this = tmp.reshape_vector_to_matrix(tmp.getSize(), 1);
 			return *this;
 		}
 
-		Matrix	&operator*=(const Matrix<value_type> &mat)
+		Matrix				&operator*=(const Matrix<value_type> &mat)
 		{
 			if (_col != mat.getRow())
 				throw std::length_error("THROW MATRIX mul_mat: _col != mat.getRow()");
@@ -292,13 +294,72 @@ namespace ft
 			return *this;
 		}
 
-		Matrix	mul_mat(const Matrix<value_type> &mat) const
+		Matrix				mul_mat(const Matrix<value_type> &mat) const
 		{
 			Matrix	tmp(*this);
 			return tmp *= mat;
 		}
 
-		Matrix	operator*(const Matrix<value_type> &mat) const { return mul_mat(mat); }
+		Matrix				operator*(const Matrix<value_type> &mat) const { return mul_mat(mat); }
+
+//ex08
+		value_type	trace() const
+		{
+			if (!is_square())
+				throw std::length_error("THROW MATRIX trace: !is_square");
+			value_type	tmp = value_type();
+			for (size_type i = 0; i < _row; i++)
+				tmp += _matrix[i * _col + i];
+			return tmp;
+		}
+
+//ex09
+		Matrix	transpose() const
+		{
+			Matrix<value_type>	tmp(_col, _row);
+			for (size_type r = 0; r < _row; r++)
+				for (size_type c = 0; c < _col; c++)
+					tmp[c * _row + r] = _matrix[r * _col + c];
+			return tmp;
+		}
+
+//ex10 O(n^3) Gaussian elimination method
+		Matrix	row_echelon() const
+		{
+			Matrix<value_type>	tmp(*this);
+			value_type			scale_tmp;
+			size_type			r_tmp;
+
+			for (size_type r = 0, c = 0; r < _row && c < _col; c++)
+			{
+				r_tmp = r;
+				for (size_type i = r + 1; i < _row; i++)			//find max
+					if (ft_abs(tmp[i * _col + c]) > ft_abs(tmp[r_tmp * _col + c]))
+						r_tmp = i;
+				if (ft_abs(tmp[r_tmp * _col + c]) > EPS)
+				{
+					if (r_tmp != r)
+						for (size_type i = 0; i < _col; i++)		//swap
+						{
+							value_type	ttt = tmp[r * _col + i];
+							tmp[r * _col + i] = tmp[r_tmp * _col + i];
+							tmp[r_tmp * _col + i] = ttt;
+						}
+					scale_tmp = tmp[r * _col + c];
+					for (size_type i = 0; i < _col; i++)			//scale
+						tmp[r * _col + i] /= scale_tmp;
+					for (size_type i = 0; i < _row; i++)			//addRows
+					{
+						scale_tmp = tmp[i * _col + c];
+						if (i != r)
+							for (size_type j = 0; j < _col; j++)
+								tmp[i * _col + j] -= scale_tmp * tmp[r * _col + j];
+					}
+					r++;
+				}
+			}
+			return tmp;
+		}
 };
 
 //ex00
@@ -319,7 +380,10 @@ namespace ft
 			size_t j = 0;
 			for (; j < mat.getCol(); j++) 
 			{
-				os << mat[i * mat.getCol() + j];
+				if (ft_abs(mat[i * mat.getCol() + j]) < EPS)
+					os << 0;
+				else
+					os << mat[i * mat.getCol() + j];
 				if (j != mat.getCol() - 1)
 					os << ", ";
 			}

@@ -1,5 +1,5 @@
 template<class T> 
-T	ft_abs(const T &tmp) { return tmp < 0 ? -1 * tmp : tmp; }
+T	ft_abs(const T &tmp) { return tmp < (T)0 ? -1 * tmp : tmp; }
 
 template<class T> 
 T	ft_max(const T &a, const T &b) { return a < b ? b : a; }
