@@ -360,16 +360,8 @@ namespace ft
 		}
 
 //ex11 Gaussian elimination for all matrix
-		value_type	determinant() const
+		Matrix		upper_triangular_matrix(Matrix<value_type> tmp) const
 		{
-			if (!is_square())
-				throw std::length_error("THROW MATRIX determinant: !is_square");
-			if (_row == 0 || _col == 0 )
-				throw std::length_error("THROW MATRIX determinant: An empty matrix cannot have a determinant");
-
-			Matrix<value_type>	tmp(*this);
-			value_type			det = 1;
-
 			for (size_type r = 0, c = 0; r < _row && c < _col; c++) //make upper triangular matrix
 			{
 				if (ft_abs(tmp[r * _col + c]) < EPS)
@@ -396,6 +388,19 @@ namespace ft
 					r++;
 				}
 			}
+			return tmp;
+		}
+
+		value_type	determinant() const
+		{
+			if (!is_square())
+				throw std::length_error("THROW MATRIX determinant: !is_square");
+			if (_row == 0 || _col == 0 )
+				throw std::length_error("THROW MATRIX determinant: An empty matrix cannot have a determinant");
+
+			Matrix<value_type>	tmp(upper_triangular_matrix(*this));
+			value_type			det = 1;
+
 			for (size_type i = 0; i < _row; i++)
 				det *= tmp[i * _col + i];
 			return det;
@@ -457,6 +462,28 @@ namespace ft
 			Matrix com = cofactor_matrix_T().scl(1 / det);
 			return com;
 		}
+
+//ex13
+		size_type	rank()
+		{
+			Matrix		tmp(upper_triangular_matrix(*this));
+			size_type	tmp_rank = 0;
+
+			for (size_type r = 0; r < _row; r++)
+			{
+				size_type	c = r;
+				for (; c < _col; c++)
+					if (tmp[r * _col + c] != 0)
+					{
+						tmp_rank++;
+						break;
+					}
+				if (c == _col)
+					break;
+			}
+			return tmp_rank;
+		}
+
 };
 
 //ex00
