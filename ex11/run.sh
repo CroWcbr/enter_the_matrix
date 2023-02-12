@@ -1,3 +1,3 @@
-c++ main.cpp #-Wall -Wextra -Werror main.cpp
+c++ -Wall -Wextra -Werror main.cpp
 ./a.out
 rm a.out
