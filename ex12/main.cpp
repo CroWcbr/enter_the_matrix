@@ -20,18 +20,7 @@ void	test_in_task()
 	std::cout << u.inverse() << std::endl;
 }
 
-void	test_additional_any_matrix()
-{
-
-}
-
-void	test_additional_error()
-{
-
-}
-
 int	main()
 {
 	test_in_task();
-
 }
