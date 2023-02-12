@@ -413,7 +413,6 @@ namespace ft
 			if (_row * _col == 4)
 				return _matrix[0] * _matrix[3] - _matrix[1] * _matrix[2];
 			
-
 			value_type			det = 0;
 
 			for (size_type i = 0; i < _row; i++) 
@@ -424,6 +423,39 @@ namespace ft
 				det += _matrix[i * _col + 0] * std::pow(-1, i) * tmp.determinant_for_4();
 			}
 			return det;
+		}
+
+//ex12
+		Matrix	cofactor_matrix_T(void) {
+			Matrix tmp;
+			Matrix com(_row, _col);
+			for (size_type r = 0; r < _row; r++) 
+			{
+				for (size_type c = 0; c < _col; c++) 
+				{
+					tmp = *this;
+					for (size_type k = 0; k < this->_row; k++) 
+					{
+						if (k != r)
+							tmp[k * _col + c] = 0;
+						else
+							tmp[k * _col + c] = 1;
+					}
+					com[r * _col + c] = tmp.determinant();
+				}
+			}
+			return com.transpose();
+		}
+
+		Matrix	inverse()
+		{
+			if (!is_square())
+				throw std::length_error("THROW MATRIX inverse: !is_square");
+			value_type det = determinant();
+			if (det == 0)
+				throw std::length_error("THROW MATRIX inverse: det == 0");
+			Matrix com = cofactor_matrix_T().scl(1 / det);
+			return com;
 		}
 };
 
