@@ -9,10 +9,10 @@
 - ex06 - Cross product
 - ex07 - Linear map, Matrix multiplication
 - ex08 - Trace
-- ex09 -
-- ex10 -
-- ex11 -
-- ex12 -
-- ex13 -
+- ex09 - Transpose
+- ex10 - Reduced row-echelon form
+- ex11 - Determinant
+- ex12 - Inverse
+- ex13 - Rank
 - ex14 -
 - ex15 -
