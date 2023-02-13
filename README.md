@@ -14,5 +14,5 @@
 - ex11 - Determinant
 - ex12 - Inverse
 - ex13 - Rank
-- ex14 -
-- ex15 -
+- ex14 - Bonus: Projection matrix
+- ex15 - Bonus: Complex vector spaces
