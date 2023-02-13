@@ -360,7 +360,7 @@ namespace ft
 		}
 
 //ex11 Gaussian elimination for all matrix
-		Matrix		upper_triangular_matrix(Matrix<value_type> tmp) const
+		Matrix		upper_triangular_matrix_change_znak_when_swap_row(Matrix<value_type> tmp) const
 		{
 			for (size_type r = 0, c = 0; r < _row && c < _col; c++) //make upper triangular matrix
 			{
@@ -398,7 +398,7 @@ namespace ft
 			if (_row == 0 || _col == 0 )
 				throw std::length_error("THROW MATRIX determinant: An empty matrix cannot have a determinant");
 
-			Matrix<value_type>	tmp(upper_triangular_matrix(*this));
+			Matrix<value_type>	tmp(upper_triangular_matrix_change_znak_when_swap_row(*this));
 			value_type			det = 1;
 
 			for (size_type i = 0; i < _row; i++)
@@ -466,7 +466,7 @@ namespace ft
 //ex13
 		size_type	rank()
 		{
-			Matrix		tmp(upper_triangular_matrix(*this));
+			Matrix		tmp(upper_triangular_matrix_change_znak_when_swap_row(*this));
 			size_type	tmp_rank = 0;
 
 			for (size_type r = 0; r < _row; r++)
