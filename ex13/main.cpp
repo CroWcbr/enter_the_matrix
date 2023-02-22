@@ -5,7 +5,7 @@ using namespace ft;
 
 void	test_in_task()
 {
-	std::cout << "------ Inverse in task ------" << std::endl;
+	std::cout << "------ Rank in task ------" << std::endl;
 
 	ft::Matrix<double> u = {{1., 0., 0.}, {0., 1., 0.}, {0., 0., 1.}};
 	std::cout << "{{1., 0., 0.}, {0., 1., 0.}, {0., 0., 1.}}" << std::endl;
