@@ -15,4 +15,4 @@
 - ex12 - Inverse
 - ex13 - Rank
 - ex14 - Bonus: Projection matrix
-- ex15 - Bonus: Complex vector spaces
+- ex15 - Bonus: Complex vector spaces (a little change in Matrix.hpp and Vector.hpp. It must work for "double" and other template)
