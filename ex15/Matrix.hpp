@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include "Vector.hpp"
+#include <type_traits>
 
 namespace ft
 {
@@ -373,7 +374,7 @@ namespace ft
 							{
 								value_type	ttt = tmp[r * _col + j];
 								tmp[r * _col + j] = tmp[i * _col + j];
-								tmp[i * _col + j] = -ttt;
+								tmp[i * _col + j] = ttt * (-1);
 							}
 							break;
 						}
@@ -506,7 +507,12 @@ namespace ft
 			for (; j < mat.getCol(); j++) 
 			{
 				if (ft_abs(mat[i * mat.getCol() + j]) < EPS)
-					os << 0;
+				{
+					if (std::is_same<T, ft::Complex>::value)
+						os << "0 + 0i";
+					else
+						os << 0;
+				}
 				else
 					os << mat[i * mat.getCol() + j];
 				if (j != mat.getCol() - 1)

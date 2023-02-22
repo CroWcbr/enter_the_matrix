@@ -2,6 +2,11 @@
 
 #include <iostream>
 #include <memory>
+#include "math_function.hpp"
+
+
+template<class T> 
+T		ft_abs(const T &tmp);
 
 namespace ft
 {
@@ -79,7 +84,21 @@ namespace ft
 								_real * cmplx.getImage() + _imag * cmplx.getReal());
 			}
 
+			Complex&	operator/=(const Complex& cmplx)
+			{
+				value_type tmp = cmplx.getReal() * cmplx.getReal() + cmplx.getImage() * cmplx.getImage();
+				value_type real = (_real * cmplx.getReal() + _imag * cmplx.getImage()) / tmp;
+				_imag = (_imag * cmplx.getReal() - _real * cmplx.getImage()) / tmp;
+				_real = real;
+				return *this;
+			}
 
+			Complex		operator/(const Complex& cmplx) const
+			{
+				value_type	tmp = cmplx.getReal() * cmplx.getReal() + cmplx.getImage() * cmplx.getImage();
+				return Complex((_real * cmplx.getReal() + _imag * cmplx.getImage()) / tmp, \
+								(_imag * cmplx.getReal() - _real * cmplx.getImage()) / tmp);
+			}
 	};
 
 	std::ostream& operator << (std::ostream& os, const Complex &cmplx)
@@ -89,16 +108,26 @@ namespace ft
 			os << " - ";
 		else
 			os << " + ";
-		os << cmplx.getImage() << "i";
+		os << ft_abs(cmplx.getImage()) << "i";
 		return os;
 	}
 
 // overload
-	double		ft_abs(const Complex &tmp) { return ft_sqrt(tmp.getReal() * tmp.getReal() + tmp.getImage() * tmp.getImage()); }
+	bool		operator==(const Complex& c1, const Complex& c2) { return (c1.getReal() == c2.getReal()) && (c1.getImage() == c2.getImage()); }
+
+	bool		operator!=(const Complex& c1, const Complex& c2) { return !(c1 == c2); }
 
 //ex01 overload
 	Complex		operator*(const double a, const Complex &b) { return b * a; }
 
 //ex02 overload
 	Complex		lerp(const Complex &u, const Complex &v, double t) { return (((1 - t) * u) + (t * v)); }
+
+//ex11 overload
+	Complex		operator/(const double &n, const Complex& cmplx)
+			{
+				Complex tmp(n);
+				return tmp/cmplx;
+			}
+
 }
