@@ -195,35 +195,35 @@ namespace ft
 		}
 
 //ex04
-		value_type	norm_1() const
+		double	norm_1() const
 		{
-			value_type	tmp = value_type();
+			double	tmp = double();
 			for (size_type i = 0; i < _size; i++)
 				tmp += ft_abs(_vector[i]);
 			return tmp;
 		}
 
-		value_type	norm() const
+		double	norm() const
 		{
-			value_type	tmp = value_type();
+			double	tmp = double();
 			for (size_type i = 0; i < _size; i++)
 				tmp += _vector[i] * _vector[i];
 			return ft_sqrt(tmp);
 		}
 
-		value_type	norm_inf() const
+		double	norm_inf() const
 		{
-			value_type	tmp = value_type();
+			double	tmp = double();
 			for (size_type i = 0; i < _size; i++)
 				tmp = ft_max(tmp, ft_abs(_vector[i]));
 			return tmp;
 		}
 
 //ex05
-		value_type	angle_cos(const Vector<value_type> &vec) const
+		double	angle_cos(const Vector<value_type> &vec) const
 		{
-			value_type	norm_this = norm();
-			value_type	norm_vec = vec.norm();
+			double	norm_this = norm();
+			double	norm_vec = vec.norm();
 			if (ft_abs(norm_this) < 0.000000001 || ft_abs(norm_vec) < 0.000000001)
 				throw std::length_error("THROW angle_cos : there is a zero point, not vector");
 			return (dot(vec) / (norm_this * norm_vec));
