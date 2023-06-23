@@ -228,7 +228,6 @@ namespace ft
 				throw std::length_error("THROW angle_cos : there is a zero point, not vector");
 			return ft_real(dot(vec) / (norm_this * norm_vec));
 		}
-
 	};
 
 //ex00
@@ -319,6 +318,8 @@ namespace ft
 	template<class T>
 	Vector<T>		cross_product(const Vector<T> &u, const Vector<T> &v)
 	{
+		if (std::is_same<T, Complex>::value)
+			throw std::length_error("THROW VECTOR cross_product: Complex has no cross_product");
 		if (u.getSize() != 3 || v.getSize() != 3)
 			throw std::length_error("THROW VECTOR cross_product: wrong size (u.getSize() != 3 || v.getSize() != 3)");
 		Vector<T>	tmp(3);

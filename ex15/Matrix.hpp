@@ -235,7 +235,6 @@ namespace ft
 
 		Matrix	&scl(const value_type &a)
 		{
-			std::cout << a << std::endl;
 			for (size_type i = 0; i < _row * _col; i++)
 				(*this)[i] *= a;
 			return *this;
