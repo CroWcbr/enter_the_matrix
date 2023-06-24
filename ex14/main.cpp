@@ -1,4 +1,5 @@
 #include "../Matrix.hpp"
+#include <fstream>
 
 using namespace ft;
 
@@ -22,18 +23,36 @@ Matrix<double> projection(double fov, double ratio, double near, double far)
 	return tmp;
 }
 
+int	write_model(ft::Matrix<double> tmp )
+{
+	std::ofstream file("proj");
+
+	if (file.is_open())
+	{
+		for (size_t r = 0; r < 4; r++) 
+		{
+			for (size_t c = 0; c < 4; c++)
+			{
+				if (c != 0)
+					file << ", ";
+				file << tmp[r * 4 + c]; 
+			}
+			file << std::endl;
+		}
+		file.close();
+	}
+	else
+	{
+		std::cerr << "ERROR: can't open/create file" << std::endl;
+		return 1;
+	}
+
+	return 0;
+}
+
 int main()
 {
 	ft::Matrix<double> tmp = projection(90, 0.8, 0.1, 100);
 	std::cout << tmp << std::endl;
-	// for (size_t r = 0; r < 4; r++) 
-	// {
-	// 	for (size_t c = 0; c < 4; c++)
-	// 	{
-	// 		if (c != 0)
-	// 			std::cout << ", ";
-	// 		std::cout << tmp[r * 4 + c];
-	// 	}
-	// 	std::cout << std::endl;
-	// }
+	write_model(tmp);
 }
